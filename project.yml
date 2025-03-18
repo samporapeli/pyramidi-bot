@@ -1,0 +1,19 @@
+parameters: {}
+environment: {}
+packages:
+    - name: webhook
+      shared: false
+      environment: {}
+      parameters: {}
+      annotations: {}
+      functions:
+        - name: update
+          binary: false
+          main: "main"
+          runtime: nodejs:18
+          web: true
+          webSecure: false
+          parameters: {}
+          environment: {}
+          annotations: {}
+          limits: {}

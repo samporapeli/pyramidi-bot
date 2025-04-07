@@ -7,9 +7,10 @@ async function main(args) {
 
   // Only keep lines without any letters
   const noAlphabetsRegex = /^[^a-zA-Z]*$/
+  const resultLineRegex = /^[0-9]\/[0-9]/
   const outputText = inputText
     .split('\n')
-    .filter(line => noAlphabetsRegex.test(line))
+    .filter(line => noAlphabetsRegex.test(line) || resultLineRegex.test(line))
     .join('\n')
     .trim()
 

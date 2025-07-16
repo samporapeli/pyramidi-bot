@@ -3,8 +3,15 @@ const crypto = require('crypto')
 async function main(args) {
   // Parse the user's input (Sanapyramidi results, hopefully)
   const inlineQuery = args.inline_query
-  const inputText = inlineQuery.query
-
+  let inputText = inlineQuery.query
+  // Sometimes, the results are pasted on just one line
+  if (inputText.split('\n').length <= 1) {
+    // Add the line breaks manually
+    inputText = inputText
+      .replaceAll(/ :/g, '\n:') // result lines
+      .replace(/: /, ':\n\n') // last result line
+      .replace(/ Pelaa itse.*/, '') // link part
+  }
   // Only keep lines without any letters
   const noAlphabetsRegex = /^[^a-zA-Z]*$/
   const resultLineRegex = /^[0-9]\/[0-9]/

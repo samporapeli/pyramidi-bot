@@ -1,9 +1,35 @@
 const crypto = require('crypto')
 
+const t = {
+  gameLink: {
+    'fi': 'https://yle.fi/a/74-20131998',
+    'sv': 'https://yle.fi/a/7-10074645',
+  },
+  resultWithButtons: {
+    'fi': 'Siivottu versio',
+    'sv': 'Städad version',
+  },
+  resultWithoutButtons: {
+    'fi': 'Ilman nappeja',
+    'sv': 'Utan knappar',
+  },
+  playButton: {
+    'fi': 'Pelaa',
+    'sv': 'Spela',
+  },
+  shareButton: {
+    'fi': 'Jaa oma tulos',
+    'sv': 'Dela ditt resultat',
+  },
+}
+
 async function main(args) {
   // Parse the user's input (Sanapyramidi results, hopefully)
   const inlineQuery = args.inline_query
   let inputText = inlineQuery.query
+
+  const lang = inputText.includes(t.gameLink.sv) ? 'sv' : 'fi'
+
   // Sometimes, the results are pasted on just one line
   if (inputText.split('\n').length <= 1) {
     // Add the line breaks manually
@@ -34,7 +60,9 @@ async function main(args) {
         .map(result => ({
           type: 'article',
           id: crypto.randomUUID(),
-          title: result.withButtons ? 'Siivottu versio' : 'Ilman nappeja',
+          title: result.withButtons
+            ? t.resultWithButtons[lang] + ' 🧽'
+            : t.resultWithoutButtons[lang] + ' 🔤',
           description: outputText,
           // Content of the message that will be sent after clicking the article
           input_message_content: { 'message_text': outputText },
@@ -43,11 +71,11 @@ async function main(args) {
           reply_markup: result.withButtons ? {
             inline_keyboard: [
               [{
-                text: 'Pelaa',
-                url: 'https://yle.fi/a/74-20131998',
+                text: t.playButton[lang],
+                url: t.gameLink[lang],
               }],
               [{
-                text: 'Jaa oma tulos',
+                text: t.shareButton[lang],
                 switch_inline_query_current_chat: '',
               }]
             ]
